@@ -418,6 +418,7 @@ multiple_replications <- function(experiment, n_reps=5, random_seed=0){
     reps <- c(reps, treat_sim)
   }
   print("Complete.")
+  return(reps)
 }
 
 
