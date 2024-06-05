@@ -15,7 +15,6 @@ options(dplyr.summarise.inform = FALSE)
 
 ### 2.1 Distribution parameters
 
-
 #' Mean and Variance of the underlying Normal Distribution
 #' 
 #' @description
@@ -69,19 +68,19 @@ DEFAULT_PROB_TRAUMA <- 0.12
 # data are held in the Github repo and loaded from there.
 NSPP_PATH = 'https://raw.githubusercontent.com/TomMonks/open-science-for-sim/main/src/notebooks/01_foss_sim/data/ed_arrivals.csv'
 
-csv_data <- getURL(NSPP_PATH)
-df <- read.csv(text=csv_data)
-
-# lock in order of time of day for bar chart display
-df$period <- factor(df$period, levels = df$period)
-
-ggplot(data=df, aes(x=period, y=arrival_rate)) +
-  geom_bar(stat="identity", fill="steelblue") + 
-  theme(axis.text.x = element_text(angle = 90, 
-                                   vjust = 0.5, 
-                                   hjust=1)) +
-  xlab("Hour of day") + 
-  ylab("Mean arrivals (patients/hr)")
+# csv_data <- getURL(NSPP_PATH)
+# df <- read.csv(text=csv_data)
+# 
+# # lock in order of time of day for bar chart display
+# df$period <- factor(df$period, levels = df$period)
+# 
+# ggplot(data=df, aes(x=period, y=arrival_rate)) +
+#   geom_bar(stat="identity", fill="steelblue") + 
+#   theme(axis.text.x = element_text(angle = 90, 
+#                                    vjust = 0.5, 
+#                                    hjust=1)) +
+#   xlab("Hour of day") + 
+#   ylab("Mean arrivals (patients/hr)")
 
 ### 2.3 Resource Counts
 DEFAULT_N_TRIAGE <- 1
@@ -398,6 +397,27 @@ single_run <- function(env, exp,
   
   # return environment and all of its results.
   return(env)
+}
+
+
+multiple_replications <- function(experiment, n_reps=5, random_seed=0){
+  
+  set.seed(random_seed)
+  
+  # note unlike in simmer documentation we use a traditional for loop
+  # instead of lapply. This allows us to separate env creation
+  # from run and preserve the environment interaction between NSPP 
+  # and current sim time.
+  # TO DO: look again -> can treat_sim be created inside single_run()
+  print("running replications...")
+  reps = vector()
+  for(rep in 1:n_reps){
+    treat_sim <- simmer("TreatSimmer", log_level=exp$log_level)
+    treat_sim <- single_run(treat_sim, exp)
+    # store the latest simulation environment and its results.
+    reps <- c(reps, treat_sim)
+  }
+  print("Complete.")
 }
 
 
