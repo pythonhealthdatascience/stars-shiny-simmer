@@ -14,11 +14,11 @@ library(waiter)
 source("./model.R")
 
 ui <- fluidPage (    # creates empty page
-
+  theme = bslib::bs_theme(bootswatch = "darkly"),
   # auto-waiter  provides a spinner for while the model is running
   autoWaiter(),
   #  title of app
-  titlePanel("treat-simmer in Shiny"),
+  titlePanel("Treatment Centre Simulation"),
   
   # layout is a sidebar—layout
   sidebarLayout(
