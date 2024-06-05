@@ -8,13 +8,15 @@
 #
 
 library(shiny)
+library(waiter)
 
 # the treat-simmer
 source("./model.R")
 
-
 ui <- fluidPage (    # creates empty page
-  
+
+  # auto-waiter  provides a spinner for while the model is running
+  autoWaiter(),
   #  title of app
   titlePanel("treat-simmer in Shiny"),
   
@@ -75,16 +77,10 @@ ui <- fluidPage (    # creates empty page
     mainPanel(
       
       # heading (results table)
-      h3("Results Table"),
+      h3("Simulation Results"),
       
       # tableOutput id = icer_table, from server
       tableOutput(outputId = "sim_summary_table"),
-      
-      # # heading (Cost effectiveness plane)
-      # h3("Cost—effectiveness Plane"),
-      # 
-      # # plotOutput id = SO_CE_plane, from server
-      # plotOutput(outputId = "SO_CE_plane")
       
     ) # close mainpanel
     
