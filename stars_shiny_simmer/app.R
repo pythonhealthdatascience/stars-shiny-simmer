@@ -9,43 +9,128 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
+# the treat-simmer
+source("./model.R")
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
 
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
+ui <- fluidPage (    # creates empty page
+  
+  #  title of app
+  titlePanel("treat-simmer in Shiny"),
+  
+  # layout is a sidebar—layout
+  sidebarLayout(
+    
+    sidebarPanel( # open sidebar panel
+      
+      # n triage bays
+      sliderInput(inputId = "n_triage",	
+                   label = "Triage bays",
+                   value = DEFAULT_N_TRIAGE,
+                   min = 1,
+                   max = 10),
+      
+      # n registration clerks
+      sliderInput(inputId = "n_reg",	
+                  label = "Registration Clerks",
+                  value = DEFAULT_N_REG,
+                  min = 1,
+                  max = 10),
+      
+      # n exam rooms
+      sliderInput(inputId = "n_exam",	
+                  label = "Examination Rooms",
+                  value = DEFAULT_N_EXAM,
+                  min = 1,
+                  max = 10),
+      
+      # n non-trauma treatment cubicles
+      sliderInput(inputId = "n_nt_cubicles",	
+                  label = "Non-trauma Cubicles",
+                  value = DEFAULT_NON_TRAUMA_CUBICLES,
+                  min = 1,
+                  max = 10),
+      
+      # n trauma stabilisation rooms
+      sliderInput(inputId = "n_trauma",	
+                  label = "Stabilisation rooms",
+                  value = DEFAULT_N_TRAUMA,
+                  min = 1,
+                  max = 10),
+      
+      # n trauma treatment cubicles
+      sliderInput(inputId = "n_trauma_cubicles",	
+                  label = "Trauma Cubicles",
+                  value = DEFAULT_TRAUMA_CUBICLES,
+                  min = 1,
+                  max = 10),
 
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
-)
+      # action button runs model when pressed
+      actionButton(inputId = "run_model",
+                   label   = "Run model")
+      
+    ),  # close sidebarPanel
+    
+    # open main panel
+    mainPanel(
+      
+      # heading (results table)
+      h3("Results Table"),
+      
+      # tableOutput id = icer_table, from server
+      tableOutput(outputId = "sim_summary_table"),
+      
+      # # heading (Cost effectiveness plane)
+      # h3("Cost—effectiveness Plane"),
+      # 
+      # # plotOutput id = SO_CE_plane, from server
+      # plotOutput(outputId = "SO_CE_plane")
+      
+    ) # close mainpanel
+    
+  )# close side barlayout
+  
+) # close UI fluidpage
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+server <- function(input, output){
+  
+  # when action button pressed ...
+  observeEvent(input$run_model,
+               ignoreNULL = F, {
+                 
+   # Run  model function with Shiny inputs
+   # 1st create the experiment using Shiny input
+   exp = create_experiment(n_triage_bays = input$n_triage,
+                           n_reg_clerks = input$n_reg,
+                           n_exam_rooms = input$n_exam,
+                           n_non_trauma_cubicles = input$n_nt_cubicles,
+                           n_trauma_rooms = input$n_trauma,
+                           n_trauma_cubicles= input$n_trauma_cubicles,
+                           log_level=0)
+   
+   # run multiple replications of the model...
+   df_model_reps = multiple_replications(
+     exp = exp,
+     n_reps=5,
+     random_seed=42)
+   
+   #—— CREATE SUMMARY TABLE ——#
+   
+   # renderTable continuously updates table
+   output$sim_summary_table <- renderTable({
+     df_res_table <- create_summary_table(df_model_reps, exp)
+     
+     # print the results table
+     df_res_table
+     
+   }) # table plot end.
+   
+   
+      }) # Observe event end
+  
+} # Server end
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
-}
 
 # Run the application 
 shinyApp(ui = ui, server = server)

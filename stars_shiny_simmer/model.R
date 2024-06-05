@@ -88,7 +88,7 @@ DEFAULT_N_REG <- 1
 DEFAULT_N_EXAM <- 3
 
 # stabilisation rooms
-DEFAULT_N_TRAUMA <- 10000
+DEFAULT_N_TRAUMA <- 1
 
 # Non-trauma cubicles
 DEFAULT_NON_TRAUMA_CUBICLES <- 1
@@ -400,7 +400,7 @@ single_run <- function(env, exp,
 }
 
 
-multiple_replications <- function(experiment, n_reps=5, random_seed=0){
+multiple_replications <- function(exp, n_reps=5, random_seed=0){
   
   set.seed(random_seed)
   
@@ -453,7 +453,7 @@ get_resource_counts <- function(exp) {
 }
 
 # mean time in the system and throughput
-calc_kpi_from_attributes_for_rep <- function(rep){
+calc_kpi_from_attributes_for_rep <- function(rep, reps){
   
   # get attributes
   att <- get_mon_attributes(reps)
@@ -480,7 +480,7 @@ calc_kpi_from_attributes_for_rep <- function(rep){
   return(rep_results)
 }
 
-calc_kpi_from_attributes <- function(){
+calc_kpi_from_attributes <- function(reps){
   # calcs total time by patient type and total throughput
   
   # empty dataframe for attribute calculations.
@@ -488,8 +488,8 @@ calc_kpi_from_attributes <- function(){
   colnames(att_results) <- c("05_total_time(non-trauma)", "08_total_time(trauma)", "09_throughput")
   
   # add each rep separately as this works faster with pivot
-  for(rep in 1:N_REPS){
-    att_results <- rbind(att_results, calc_kpi_from_attributes_for_rep(rep))
+  for(rep_i in 1:length(reps)){
+    att_results <- rbind(att_results, calc_kpi_from_attributes_for_rep(rep_i, reps))
   }
   
   # return the KPIs by replications
@@ -568,7 +568,7 @@ create_summary_table <- function(reps, exp, dp=2){
   
   ## KPIs calculated from attributes
   # empty dataframe for attribute calculations.
-  att_results <- calc_kpi_from_attributes()
+  att_results <- calc_kpi_from_attributes(reps)
   mean_att_results <- colMeans(att_results)
   
   overall <- overall %>%
