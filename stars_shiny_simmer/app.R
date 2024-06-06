@@ -77,6 +77,8 @@ body <- dashboardBody(
           collapsible = TRUE, 
           solidHeader = TRUE,
           #uiOutput("imageUI"),
+          # checkout the width options... auto...
+          # https://www.rdocumentation.org/packages/shiny/versions/0.10.2.1/topics/imageOutput
           img(src="process_flow_img.png", height = 200, align="center")
       ),
       
