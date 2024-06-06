@@ -10,6 +10,7 @@
 library(shiny)
 library(shinydashboard)
 library(waiter)
+library(png)
 
 # the treat-simmer
 source("./model.R")
@@ -72,12 +73,11 @@ body <- dashboardBody(
       
       h6("A simple simulation model of a urgent care and treatment centre."),
       
-      box(title = "Treatement Process",
+      box(title = "Treatment Process",
           collapsible = TRUE, 
           solidHeader = TRUE,
-          textInput("given", "Given Name"),
-          textInput("surname", "Surname"),
-          selectInput("pet", "What is your favourite pet?", c("cats", "dogs", "ferrets"))
+          #uiOutput("imageUI"),
+          img(src="process_flow_img.png", height = 200, align="center")
       ),
       
       box(title = "Daily Arrival Pattern",
@@ -158,16 +158,58 @@ server <- function(input, output){
       }) # Observe event end
   
   
+  imgFileName <- reactive({
+    paste0("./www/process_flow_img.png")
+  })
+  
+  imgFile <- reactive({
+    readPNG(imgFileName(), info=TRUE)
+  })
+  
+  
+  imgSize <- reactive({
+    info <- unlist(stringr::str_split(attr(imgFile(), "info")$dim, stringr::fixed(" ")))
+    info <- paste0(info, "px")
+    names(info) <- c("width", "height")
+    info <- as.list(info)
+    info
+  })
+  
+  output$info <- renderText({
+    paste0("Height: ", imgSize()$height, "; Width: ", imgSize()$width)
+  })
+
+  output$image <- renderImage({
+    list(
+      src=imgFileName(),
+      contentType="image/png",
+      width=imgSize()$width,
+      height=imgSize()$height,
+      alt=paste0("A process flow image"),
+      class="myImageClass"
+    )
+  })
+  
+  
   # Send a pre-rendered image, and don't delete the image after sending it
-  output$nihrImage <- renderImage({
+  output$processImage <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
-    filename <- normalizePath(file.path('./img/nihr.png'))
-    
+    filename <- normalizePath(file.path('./www/process_flow_img.png'))
+
     # Return a list containing the filename and alt text
     list(src = filename,
-         alt = "NIHR Logo")
-    
+         alt = "Process Flow Logo",
+         height = 200,
+         )
+
   }, deleteFile = FALSE)
+  
+  
+  
+  # update the UI here by changing the height of the image div
+  output$imageUI <- renderUI({
+    imageOutput("image", height = imgSize()$height)
+  })
   
 } # Server end
 
