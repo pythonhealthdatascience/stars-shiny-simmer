@@ -71,9 +71,38 @@ body <- dashboardBody(
       h2("Treatment Centre Simulation Model"),
       
       h6("A simple simulation model of a urgent care and treatment centre."),
-      actionButton("run_model", "Run simulation"),
-      tableOutput("sim_summary_table")
-            
+      
+      box(title = "Treatement Process",
+          collapsible = TRUE, 
+          solidHeader = TRUE,
+          textInput("given", "Given Name"),
+          textInput("surname", "Surname"),
+          selectInput("pet", "What is your favourite pet?", c("cats", "dogs", "ferrets"))
+      ),
+      
+      box(title = "Daily Arrival Pattern",
+          collapsible = TRUE, 
+          solidHeader = TRUE,
+          textInput("given", "Given Name"),
+          textInput("surname", "Surname"),
+          selectInput("pet", "What is your favourite pet?", c("cats", "dogs", "ferrets"))
+      ),
+      
+      box(title = "Simulation control",
+          collapsible = FALSE, 
+          solidHeader = FALSE,
+          width=12,
+          actionButton("run_model", "Run simulation"),
+      ),
+      
+      
+      box(title = "Tabular results",
+          collapsible = TRUE, 
+          solidHeader = TRUE,
+          tableOutput("sim_summary_table")
+      ),
+      
+    
     ),
     
     tabItem(tabName = "about",
