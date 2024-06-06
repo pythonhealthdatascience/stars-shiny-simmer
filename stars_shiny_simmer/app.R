@@ -8,85 +8,88 @@
 #
 
 library(shiny)
+library(shinydashboard)
 library(waiter)
 
 # the treat-simmer
 source("./model.R")
 
-ui <- fluidPage (    # creates empty page
-  theme = bslib::bs_theme(bootswatch = "darkly"),
-  # auto-waiter  provides a spinner for while the model is running
-  autoWaiter(),
-  #  title of app
-  titlePanel("Treatment Centre Simulation"),
+sidebar <- dashboardSidebar(
+  sidebarMenu(
+    menuItem("Interative simulation", icon = icon("dashboard"), 
+             tabName = "intsim"),
+    menuItem("About", icon = icon("th"), tabName = "about")
+  ),
   
-  # layout is a sidebar—layout
-  sidebarLayout(
-    
-    sidebarPanel( # open sidebar panel
-      
-      # n triage bays
-      sliderInput(inputId = "n_triage",	
-                   label = "Triage bays",
-                   value = DEFAULT_N_TRIAGE,
-                   min = 1,
-                   max = 10),
-      
-      # n registration clerks
-      sliderInput(inputId = "n_reg",	
-                  label = "Registration Clerks",
-                  value = DEFAULT_N_REG,
-                  min = 1,
-                  max = 10),
-      
-      # n exam rooms
-      sliderInput(inputId = "n_exam",	
-                  label = "Examination Rooms",
-                  value = DEFAULT_N_EXAM,
-                  min = 1,
-                  max = 10),
-      
-      # n non-trauma treatment cubicles
-      sliderInput(inputId = "n_nt_cubicles",	
-                  label = "Non-trauma Cubicles",
-                  value = DEFAULT_NON_TRAUMA_CUBICLES,
-                  min = 1,
-                  max = 10),
-      
-      # n trauma stabilisation rooms
-      sliderInput(inputId = "n_trauma",	
-                  label = "Stabilisation rooms",
-                  value = DEFAULT_N_TRAUMA,
-                  min = 1,
-                  max = 10),
-      
-      # n trauma treatment cubicles
-      sliderInput(inputId = "n_trauma_cubicles",	
-                  label = "Trauma Cubicles",
-                  value = DEFAULT_TRAUMA_CUBICLES,
-                  min = 1,
-                  max = 10),
+  # n triage bays
+  sliderInput(inputId = "n_triage",
+              label = "Triage bays",
+              value = DEFAULT_N_TRIAGE,
+              min = 1,
+              max = 10,
+              step = 1),
+  
+  # n registration clerks
+  sliderInput(inputId = "n_reg",
+              label = "Registration Clerks",
+              value = DEFAULT_N_REG,
+              min = 1,
+              max = 10),
+  
+  # n exam rooms
+  sliderInput(inputId = "n_exam",
+              label = "Examination Rooms",
+              value = DEFAULT_N_EXAM,
+              min = 1,
+              max = 10),
+  
+  # n non-trauma treatment cubicles
+  sliderInput(inputId = "n_nt_cubicles",
+              label = "Non-trauma Cubicles",
+              value = DEFAULT_NON_TRAUMA_CUBICLES,
+              min = 1,
+              max = 10),
+  
+  # n trauma stabilisation rooms
+  sliderInput(inputId = "n_trauma",
+              label = "Stabilisation rooms",
+              value = DEFAULT_N_TRAUMA,
+              min = 1,
+              max = 10),
+  
+  # n trauma treatment cubicles
+  sliderInput(inputId = "n_trauma_cubicles",
+              label = "Trauma Cubicles",
+              value = DEFAULT_TRAUMA_CUBICLES,
+              min = 1,
+              max = 10)
+)
 
-      # action button runs model when pressed
-      actionButton(inputId = "run_model",
-                   label   = "Run model")
+body <- dashboardBody(
+  tabItems(
+    tabItem(tabName = "intsim",
+      h2("Treatment Centre Simulation Model"),
       
-    ),  # close sidebarPanel
+      h6("A simple simulation model of a urgent care and treatment centre."),
+      actionButton("run_model", "Run simulation"),
+      tableOutput("sim_summary_table")
+            
+    ),
     
-    # open main panel
-    mainPanel(
-      
-      # heading (results table)
-      h3("Simulation Results"),
-      
-      # tableOutput id = icer_table, from server
-      tableOutput(outputId = "sim_summary_table"),
-      
-    ) # close mainpanel
-    
-  )# close side barlayout
-  
-) # close UI fluidpage
+    tabItem(tabName = "about",
+            h2("Widgets tab content")
+    )
+  )
+)
+
+# Put them together into a dashboardPage
+ui <- dashboardPage(
+  dashboardHeader(title = "Treat-Simmer"),
+  sidebar,
+  body
+)
+
+
 
 
 server <- function(input, output){
@@ -124,6 +127,18 @@ server <- function(input, output){
    
    
       }) # Observe event end
+  
+  
+  # Send a pre-rendered image, and don't delete the image after sending it
+  output$nihrImage <- renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    filename <- normalizePath(file.path('./img/nihr.png'))
+    
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = "NIHR Logo")
+    
+  }, deleteFile = FALSE)
   
 } # Server end
 
