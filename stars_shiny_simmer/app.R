@@ -21,7 +21,8 @@ sidebar <- dashboardSidebar(
     menuItem("Overview", icon = icon("star"), tabName = "overview"),
     menuItem("Interative simulation", icon = icon("dashboard"), 
              tabName = "intsim"),
-    menuItem("About", icon = icon("th"), tabName = "about")
+    menuItem("About", icon = icon("th"), tabName = "about"),
+    menuItem("License", icon = icon("th"), tabName = "license")
   ),
   
   # conditionalPanel allows use to dynamically add/hide the inputs depending
@@ -149,6 +150,10 @@ body <- dashboardBody(
           
 
           
+    ),
+    tabItem(tabName = "license",
+          h2("License"),
+          includeMarkdown("www/txt/license.md")
     )
   )
 )
