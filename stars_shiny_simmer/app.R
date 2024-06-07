@@ -22,6 +22,7 @@ sidebar <- dashboardSidebar(
     menuItem("Interative simulation", icon = icon("dashboard"), 
              tabName = "intsim"),
     menuItem("About", icon = icon("lightbulb"), tabName = "about"),
+    menuItem("Citation", icon = icon("book"), tabName = "citation"),
     menuItem("License", icon = icon("legal"), tabName = "license")
   ),
   
@@ -154,6 +155,9 @@ body <- dashboardBody(
     tabItem(tabName = "license",
           h2("License"),
           includeMarkdown("www/txt/license.md")
+    ),
+    tabItem(tabName = "citation",
+        includeMarkdown("www/txt/citation.md")
     )
   )
 )
