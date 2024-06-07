@@ -1,5 +1,3 @@
-# About
-
 This work is part of the **S**haring **T**ools and **A**rtefacts for **R**eproducible **S**imulations (STARS) in Healthcare study.  
 
 This study is funded [UK Research and Innovation (UKRI)](https://www.ukri.org/) Medical Research Council's (MRC) [*Better Methods, Better Research* programme](https://www.ukri.org/opportunity/better-methods-better-research/).
@@ -7,7 +5,7 @@ This study is funded [UK Research and Innovation (UKRI)](https://www.ukri.org/) 
 > 📝 **Note:** The model presented here is **work in progress** towards STARS version 2.0.
 
 
-## STARS Team
+### STARS Team
 
 | Member      | ORCID |
 | ----------- | ----------- |
@@ -18,14 +16,14 @@ This study is funded [UK Research and Innovation (UKRI)](https://www.ukri.org/) 
 | Amy Heather      | [![ORCID: Heather](https://img.shields.io/badge/ORCID-0000--0002--6596--3479-brightgreen)](https://orcid.org/0000-0002-6596-3479)|
 
 
-## Modelling and Simulation Software
+### Modelling and Simulation Software
 
 The model is written in `R` and `simmer`.  The simulation library `simmer` uses a **process based model worldview**.  Given its simplicity it is a highly flexible discrete-event simulation package.
 
 
 > Detailed documentation for `simmer` can be found here: https://r-simmer.org/
 
-## Web App
+### Web App
 
 The interactive web application was developed in `Shiny`.
 

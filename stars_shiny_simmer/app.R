@@ -126,7 +126,29 @@ body <- dashboardBody(
     ),
     
     tabItem(tabName = "about",
-            includeMarkdown("www/txt/about.md")
+          # allow image to be dynamically resized with CSS
+          # source: https://stackoverflow.com/questions/30478541/how-can-i-make-the-width-of-an-image-in-a-shiny-app-dynamic
+          tags$head(tags$style(
+            type="text/css",
+            "#starsLogo img {max-width: 80%; width: 80%; height: auto}"
+          )),
+          box(title = "",
+              collapsible = FALSE, 
+              collapsed = FALSE,
+              solidHeader = FALSE,
+              includeMarkdown("www/txt/about.md")
+          ),
+          
+          box(title = "",
+              collapsible = FALSE,
+              collapsed = FALSE,
+              solidHeader = TRUE,
+              imageOutput("starsLogo")
+
+          ),
+          
+
+          
     )
   )
 )
@@ -199,6 +221,18 @@ server <- function(input, output){
          alt = "Process Flow Logo"
          )
 
+  }, deleteFile = FALSE)
+  
+  
+  # Send a pre-rendered image, and don't delete the image after sending it
+  output$starsLogo <- renderImage({
+    filename <- normalizePath(file.path('./www/stars_logo_blue_text.png'))
+    
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = "STARS Logo"
+    )
+    
   }, deleteFile = FALSE)
   
   # time dependent arrival profile plot
