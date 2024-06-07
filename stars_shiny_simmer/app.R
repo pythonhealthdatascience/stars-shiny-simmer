@@ -91,12 +91,14 @@ body <- dashboardBody(
       
       box(title = "Treatment Process",
           collapsible = TRUE, 
+          collapsed = TRUE,
           solidHeader = TRUE,
           imageOutput("processImage"),
       ),
       
       box(title = "Daily Arrival Pattern",
           collapsible = TRUE, 
+          collapsed = TRUE,
           solidHeader = TRUE,
           plotOutput("arrivals_plot")
       ),
