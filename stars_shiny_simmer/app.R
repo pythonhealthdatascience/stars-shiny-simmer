@@ -18,6 +18,7 @@ source("./model.R")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(id = "sidebarid",
+    menuItem("Overview", icon = icon("star"), tabName = "overview"),
     menuItem("Interative simulation", icon = icon("dashboard"), 
              tabName = "intsim"),
     menuItem("About", icon = icon("th"), tabName = "about")
@@ -77,6 +78,10 @@ sidebar <- dashboardSidebar(
 body <- dashboardBody(
   
   tabItems(
+    tabItem(tabName = "overview",
+        h2("Treatment Centre Simulation Model"),
+        includeMarkdown("www/txt/overview.md")
+    ),
     tabItem(tabName = "intsim",
       h2("Treatment Centre Simulation Model"),
       
