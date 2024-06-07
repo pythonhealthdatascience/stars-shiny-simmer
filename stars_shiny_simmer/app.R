@@ -112,13 +112,14 @@ body <- dashboardBody(
     ),
     
     tabItem(tabName = "about",
-            h2("Widgets tab content")
+            includeMarkdown("www/txt/about.md")
     )
   )
 )
 
 # Put them together into a dashboardPage
 ui <- dashboardPage(
+  skin = "purple",
   dashboardHeader(title = "Treat-Simmer"),
   sidebar,
   body
