@@ -17,54 +17,61 @@ library(tibble)
 source("./model.R")
 
 sidebar <- dashboardSidebar(
-  sidebarMenu(
+  sidebarMenu(id = "sidebarid",
     menuItem("Interative simulation", icon = icon("dashboard"), 
              tabName = "intsim"),
     menuItem("About", icon = icon("th"), tabName = "about")
   ),
   
-  # n triage bays
-  sliderInput(inputId = "n_triage",
-              label = "Triage bays",
-              value = DEFAULT_N_TRIAGE,
-              min = 1,
-              max = 10,
-              step = 1),
-  
-  # n registration clerks
-  sliderInput(inputId = "n_reg",
-              label = "Registration Clerks",
-              value = DEFAULT_N_REG,
-              min = 1,
-              max = 10),
-  
-  # n exam rooms
-  sliderInput(inputId = "n_exam",
-              label = "Examination Rooms",
-              value = DEFAULT_N_EXAM,
-              min = 1,
-              max = 10),
-  
-  # n non-trauma treatment cubicles
-  sliderInput(inputId = "n_nt_cubicles",
-              label = "Non-trauma Cubicles",
-              value = DEFAULT_NON_TRAUMA_CUBICLES,
-              min = 1,
-              max = 10),
-  
-  # n trauma stabilisation rooms
-  sliderInput(inputId = "n_trauma",
-              label = "Stabilisation rooms",
-              value = DEFAULT_N_TRAUMA,
-              min = 1,
-              max = 10),
-  
-  # n trauma treatment cubicles
-  sliderInput(inputId = "n_trauma_cubicles",
-              label = "Trauma Cubicles",
-              value = DEFAULT_TRAUMA_CUBICLES,
-              min = 1,
-              max = 10)
+  # conditionalPanel allows use to dynamically add/hide the inputs depending
+  # on if the interactive page is active.
+  # source: https://stackoverflow.com/questions/61299368/shiny-and-shinydashboard-how-to-display-inputs-in-sidebar-only-on-certain-tabs
+  conditionalPanel(
+    'input.sidebarid == "intsim"',
+    
+    # n triage bays
+    sliderInput(inputId = "n_triage",
+                label = "Triage bays",
+                value = DEFAULT_N_TRIAGE,
+                min = 1,
+                max = 10,
+                step = 1),
+    
+    # n registration clerks
+    sliderInput(inputId = "n_reg",
+                label = "Registration Clerks",
+                value = DEFAULT_N_REG,
+                min = 1,
+                max = 10),
+    
+    # n exam rooms
+    sliderInput(inputId = "n_exam",
+                label = "Examination Rooms",
+                value = DEFAULT_N_EXAM,
+                min = 1,
+                max = 10),
+    
+    # n non-trauma treatment cubicles
+    sliderInput(inputId = "n_nt_cubicles",
+                label = "Non-trauma Cubicles",
+                value = DEFAULT_NON_TRAUMA_CUBICLES,
+                min = 1,
+                max = 10),
+    
+    # n trauma stabilisation rooms
+    sliderInput(inputId = "n_trauma",
+                label = "Stabilisation rooms",
+                value = DEFAULT_N_TRAUMA,
+                min = 1,
+                max = 10),
+    
+    # n trauma treatment cubicles
+    sliderInput(inputId = "n_trauma_cubicles",
+                label = "Trauma Cubicles",
+                value = DEFAULT_TRAUMA_CUBICLES,
+                min = 1,
+                max = 10)
+  )
 )
 
 body <- dashboardBody(
