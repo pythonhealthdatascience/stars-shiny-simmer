@@ -10,7 +10,8 @@
 library(shiny)
 library(shinydashboard)
 library(waiter)
-library(png)
+library(ggplot2)
+library(tibble)
 
 # the treat-simmer
 source("./model.R")
@@ -67,27 +68,30 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  
   tabItems(
     tabItem(tabName = "intsim",
       h2("Treatment Centre Simulation Model"),
       
       h6("A simple simulation model of a urgent care and treatment centre."),
       
+      # allow image to be dynamically resized with CSS
+      # source: https://stackoverflow.com/questions/30478541/how-can-i-make-the-width-of-an-image-in-a-shiny-app-dynamic
+      tags$head(tags$style(
+        type="text/css",
+        "#processImage img {max-width: 100%; width: 100%; height: auto}"
+      )),
+      
       box(title = "Treatment Process",
           collapsible = TRUE, 
           solidHeader = TRUE,
-          #uiOutput("imageUI"),
-          # checkout the width options... auto...
-          # https://www.rdocumentation.org/packages/shiny/versions/0.10.2.1/topics/imageOutput
-          img(src="process_flow_img.png", height = 200, align="center")
+          imageOutput("processImage"),
       ),
       
       box(title = "Daily Arrival Pattern",
           collapsible = TRUE, 
           solidHeader = TRUE,
-          textInput("given", "Given Name"),
-          textInput("surname", "Surname"),
-          selectInput("pet", "What is your favourite pet?", c("cats", "dogs", "ferrets"))
+          plotOutput("arrivals_plot")
       ),
       
       box(title = "Simulation control",
@@ -125,6 +129,17 @@ ui <- dashboardPage(
 
 server <- function(input, output){
   
+  # load arrival profile
+  arrival_data <- reactive({
+    csv_data <- getURL(NSPP_PATH)
+    df <- read.csv(text=csv_data)
+    
+    # lock in order of time of day for bar chart display
+    df$period <- factor(df$period, levels = df$period)
+    df
+  })
+  
+  
   # when action button pressed ...
   observeEvent(input$run_model,
                ignoreNULL = F, {
@@ -160,58 +175,30 @@ server <- function(input, output){
       }) # Observe event end
   
   
-  imgFileName <- reactive({
-    paste0("./www/process_flow_img.png")
-  })
-  
-  imgFile <- reactive({
-    readPNG(imgFileName(), info=TRUE)
-  })
-  
-  
-  imgSize <- reactive({
-    info <- unlist(stringr::str_split(attr(imgFile(), "info")$dim, stringr::fixed(" ")))
-    info <- paste0(info, "px")
-    names(info) <- c("width", "height")
-    info <- as.list(info)
-    info
-  })
-  
-  output$info <- renderText({
-    paste0("Height: ", imgSize()$height, "; Width: ", imgSize()$width)
-  })
-
-  output$image <- renderImage({
-    list(
-      src=imgFileName(),
-      contentType="image/png",
-      width=imgSize()$width,
-      height=imgSize()$height,
-      alt=paste0("A process flow image"),
-      class="myImageClass"
-    )
-  })
-  
-  
   # Send a pre-rendered image, and don't delete the image after sending it
   output$processImage <- renderImage({
-    # When input$n is 3, filename is ./images/image3.jpeg
     filename <- normalizePath(file.path('./www/process_flow_img.png'))
 
     # Return a list containing the filename and alt text
     list(src = filename,
-         alt = "Process Flow Logo",
-         height = 200,
+         alt = "Process Flow Logo"
          )
 
   }, deleteFile = FALSE)
   
+  # time dependent arrival profile plot
+  output$arrivals_plot <- renderPlot({
+    ggplot(data=arrival_data(), aes(x=period, y=arrival_rate)) +
+      geom_bar(stat="identity", fill="steelblue") + 
+      theme(axis.text.x = element_text(angle = 90, 
+                                       vjust = 0.5, 
+                                       hjust=1)) +
+      xlab("Hour of day") + 
+      ylab("Mean arrivals (patients/hr)")
+  }, res = 96)
   
   
-  # update the UI here by changing the height of the image div
-  output$imageUI <- renderUI({
-    imageOutput("image", height = imgSize()$height)
-  })
+  
   
 } # Server end
 
