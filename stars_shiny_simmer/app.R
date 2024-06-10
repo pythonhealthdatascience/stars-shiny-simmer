@@ -15,6 +15,7 @@ library(tibble)
 
 # the treat-simmer
 source("./model.R")
+source("./output_analysis.R")
 
 sidebar <- dashboardSidebar(
   sidebarMenu(id = "sidebarid",
@@ -210,12 +211,17 @@ server <- function(input, output){
    
    # renderTable continuously updates table
    output$sim_summary_table <- renderTable({
-     df_res_table <- create_summary_table(df_model_reps, exp)
+     # generate KPI by replication table
+     rep_table <- replication_results_table(reps, 
+                                            DEFAULT_RESULTS_COLLECTION_PERIOD)
+     # create mean summary of KPI across replications
+     summary_table <- create_summary_table(rep_table, exp)
      
      # print the results table
-     df_res_table
+     summary_table
      
-   }) # table plot end.
+   }, 
+   rownames = TRUE) # table plot end.
    
    
       }) # Observe event end
