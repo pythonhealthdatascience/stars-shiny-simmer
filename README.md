@@ -46,6 +46,6 @@ We adapt a textbook example from Nelson (2013): a terminating discrete-event sim
 
 ## Online documentation produced by Quarto
 
-[![Read the Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://tommonks.github.io/treat-sim-rsimmer)
+[![Read the Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://pythonhealthdatascience.github.io/stars-treat-simmer)
 
-* The documentation can be access at [https://tommonks.github.io/treat-sim-rsimmer](https://tommonks.github.io/treat-sim-rsimmer)
+* The documentation can be access at [https://pythonhealthdatascience.github.io/stars-treat-simmer](https://pythonhealthdatascience.github.io/stars-treat-simmer)
