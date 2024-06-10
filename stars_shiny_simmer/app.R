@@ -122,8 +122,15 @@ body <- dashboardBody(
       box(title = "Tabular results",
           collapsible = TRUE, 
           solidHeader = TRUE,
+          width=4,
           tableOutput("sim_summary_table")
       ),
+      box(title = "Replications Histogram",
+          collapsible = TRUE, 
+          solidHeader = TRUE,
+          width=8,
+          plotOutput("rep_histogram")
+      )
       
     
     ),
@@ -176,6 +183,33 @@ ui <- dashboardPage(
 
 server <- function(input, output){
   
+  # reactive value for replication results.
+  replications_table <- reactiveVal(NA)
+  
+  run_simulation <- reactive({
+    # Run the model function with Shiny inputs
+    # 1st create the experiment using Shiny
+    exp = create_experiment(n_triage_bays = input$n_triage,
+                            n_reg_clerks = input$n_reg,
+                            n_exam_rooms = input$n_exam,
+                            n_non_trauma_cubicles = input$n_nt_cubicles,
+                            n_trauma_rooms = input$n_trauma,
+                            n_trauma_cubicles= input$n_trauma_cubicles,
+                            log_level=0)
+    
+    # run multiple replications of the model...
+    df_model_reps = multiple_replications(exp = exp,
+                                          n_reps=5,
+                                          random_seed=42)
+    
+    # return a replications table
+    results <- replication_results_table(df_model_reps, 
+                                         DEFAULT_RESULTS_COLLECTION_PERIOD)
+    
+    return(results)
+    
+  })
+  
   # load arrival profile
   arrival_data <- reactive({
     csv_data <- getURL(NSPP_PATH)
@@ -183,39 +217,22 @@ server <- function(input, output){
     
     # lock in order of time of day for bar chart display
     df$period <- factor(df$period, levels = df$period)
-    df
+    return(df)
   })
   
   
+                
   # when action button pressed ...
   observeEvent(input$run_model,
                ignoreNULL = F, {
-                 
-   # Run  model function with Shiny inputs
-   # 1st create the experiment using Shiny input
-   exp = create_experiment(n_triage_bays = input$n_triage,
-                           n_reg_clerks = input$n_reg,
-                           n_exam_rooms = input$n_exam,
-                           n_non_trauma_cubicles = input$n_nt_cubicles,
-                           n_trauma_rooms = input$n_trauma,
-                           n_trauma_cubicles= input$n_trauma_cubicles,
-                           log_level=0)
-   
-   # run multiple replications of the model...
-   df_model_reps = multiple_replications(
-     exp = exp,
-     n_reps=5,
-     random_seed=42)
-   
-   #—— CREATE SUMMARY TABLE ——#
-   
+
+  # update the replications table...
+  replications_table(run_simulation())
+  
    # renderTable continuously updates table
    output$sim_summary_table <- renderTable({
-     # generate KPI by replication table
-     rep_table <- replication_results_table(reps, 
-                                            DEFAULT_RESULTS_COLLECTION_PERIOD)
      # create mean summary of KPI across replications
-     summary_table <- create_summary_table(rep_table, exp)
+     summary_table <- create_summary_table(replications_table(), exp)
      
      # print the results table
      summary_table
@@ -224,7 +241,15 @@ server <- function(input, output){
    rownames = TRUE) # table plot end.
    
    
-      }) # Observe event end
+   ## output histogram of replications
+   output$rep_histogram <- renderPlot({
+     g <- histogram_of_replications(replications_table(), 
+                                    "09_throughput", 
+                                    "patients/day", n_bins=10)
+     g
+   }, res = 96)
+   
+  }) # Observe event end
   
   
   # Send a pre-rendered image, and don't delete the image after sending it
@@ -260,8 +285,6 @@ server <- function(input, output){
       xlab("Hour of day") + 
       ylab("Mean arrivals (patients/hr)")
   }, res = 96)
-  
-  
   
   
 } # Server end

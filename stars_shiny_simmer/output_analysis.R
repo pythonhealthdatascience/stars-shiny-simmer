@@ -207,9 +207,9 @@ replication_results_table <- function(reps, results_collection_period){
   # generate and merge all results tables on the replication column
   results_table <- arrivals_by_replication(reps) %>% 
     merge(resource_waiting_times_by_replication(reps), by="replication", all=TRUE) %>% 
-    merge(resource_utilisation_by_replication(reps, 
-                                              results_collection_period), 
-          by="replication", all=TRUE) %>% 
+    merge(resource_utilisation_by_replication(reps,
+                                              results_collection_period),
+           by="replication", all=TRUE) %>% 
     merge(system_kpi_by_replication(reps), by="replication", all=TRUE) %>% 
     # sort by column names to get "replication" followed by ordered 00_, 01a, 01b and so on...
     select(replication, sort(tidyselect::peek_vars()))
