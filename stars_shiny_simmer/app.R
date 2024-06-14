@@ -81,7 +81,43 @@ sidebar <- dashboardSidebar(
                 label = "Trauma Cubicles",
                 value = DEFAULT_TRAUMA_CUBICLES,
                 min = 1,
-                max = 10)
+                max = 10),
+    
+    h5("Trauma pathway"),
+    
+    sliderInput(inputId = "prob_trauma",
+                label = "Probability trauma patient",
+                value = DEFAULT_PROB_TRAUMA,
+                min = 0,
+                max = 1.0),
+    
+    sliderInput(inputId = "mean_trauma_treat_time",
+                label = "Mean treatment time",
+                value = DEFAULT_TRAUMA_TREATMENT_PARAMS$mu,
+                min = 0.0,
+                max = 100.0),
+    
+    # This isn't right because we need to convert 
+    # from lognormal to normal...
+    sliderInput(inputId = "var_trauma_treat_time",
+                label = "Variance of treatment time",
+                value = DEFAULT_TRAUMA_TREATMENT_PARAMS$sigma,
+                min = 0.0,
+                max = 10.0),
+    
+    h5("Non-Trauma pathway"),
+    
+    sliderInput(inputId = "mean_exam_time",
+                label = "Mean examination time",
+                value = DEFAULT_EXAM_PARAMS$mean,
+                min = 0.0,
+                max = 45.0),
+    
+    sliderInput(inputId = "var_exam_time",
+                label = "Variance of examination time",
+                value = DEFAULT_EXAM_PARAMS$var,
+                min = 0.0,
+                max = 15.0),
   )
 )
 
