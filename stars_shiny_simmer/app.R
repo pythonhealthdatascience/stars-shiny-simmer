@@ -18,7 +18,13 @@ source("./model.R")
 source("./output_analysis.R")
 
 sidebar <- dashboardSidebar(
-  sidebarMenu(id = "sidebarid",
+  
+  # This CSS adds a scoll bar to the side bar.
+  # src: https://stackoverflow.com/questions/31253351/r-shiny-dashboard-how-to-add-vertical-scrollbar-to-dashboard-sidebar
+  shiny::tags$style(
+    shiny::HTML(".sidebar {height: calc(100vh - 50px); overflow-y: scroll; scrollbar-width: none;}")
+  ),
+    sidebarMenu(id = "sidebarid",
     menuItem("Overview", icon = icon("star"), tabName = "overview"),
     menuItem("Interative simulation", icon = icon("dashboard"), 
              tabName = "intsim"),
@@ -32,6 +38,7 @@ sidebar <- dashboardSidebar(
   # source: https://stackoverflow.com/questions/61299368/shiny-and-shinydashboard-how-to-display-inputs-in-sidebar-only-on-certain-tabs
   conditionalPanel(
     'input.sidebarid == "intsim"',
+    
     
     # n triage bays
     sliderInput(inputId = "n_triage",
@@ -79,6 +86,7 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  #style = "height: 90vh; overflow-y: auto;",
   
   tabItems(
     tabItem(tabName = "overview",
