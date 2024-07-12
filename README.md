@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12733947.svg)](https://doi.org/10.5281/zenodo.12733947)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Read the Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://tommonks.github.io/treat-sim-rsimmer/)
 [![ORCID: Harper](https://img.shields.io/badge/ORCID-0000--0001--5274--5037-brightgreen)](https://orcid.org/0000-0001-5274-5037)
@@ -32,7 +33,45 @@ This repo demonstrates the application of sharing a discrete-event simulation mo
   
 ## Citation
 
-To Add
+Please cite our code if you use it ☺
+
+> Monks, T., Harper, A., Heather, A., & Mustafee, N. (2024). Sharing Tools and Artefacts for Reproducible Simulations 2.0: a template for a `shiny` interface to a `simmer` DES model (v0.1.0). Zenodo. https://doi.org/10.5281/zenodo.12733947
+
+```bibtex
+@software{stars_shiny_simmer,
+  author       = {Monks, Thomas and
+                  Harper, Alison and
+                  Heather, Amy and
+                  Mustafee, Navonil},
+  title        = {{Sharing Tools and Artefacts for Reproducible 
+                   Simulations 2.0: a template for a `shiny`
+                   interface to a `simmer` DES model}},
+  month        = jul,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v0.1.0},
+  doi          = {10.5281/zenodo.12733947},
+  url          = {https://doi.org/10.5281/zenodo.12733947}
+}
+```
+
+We do not have a publication to support this work yet.  For now, please cite the Journal of Simulation article that reports STARS 1.0 and our pilot work.
+
+```bibtex
+@article{towards_stars_jos_paper,
+author = {Thomas Monks, Alison Harper and Navonil Mustafee},
+title = {Towards sharing tools and artefacts for reusable simulations in healthcare},
+journal = {Journal of Simulation},
+volume = {0},
+number = {0},
+pages = {1--20},
+year = {2024},
+publisher = {Taylor \& Francis},
+doi = {10.1080/17477778.2024.2347882},
+URL = { https://doi.org/10.1080/17477778.2024.2347882},
+}
+```
+
 
 ## Funding
 
