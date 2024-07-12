@@ -94,7 +94,7 @@ resource_utilisation <- function(df, scheduled_time){
 }
 
 # calculate resource utilisation and return table (rows = reps and cols = resources)
-resource_utilisation_by_replication <- function(reps, results_collection_period){
+resource_utilisation_by_replication <- function(reps, exp, results_collection_period){
   
   # get results dataframe broken down by resource and replication.
   cols <- c("resource", "replication")
@@ -203,11 +203,11 @@ system_kpi_by_replication <- function(reps){
 ### 9.5. Function to create the replications table
 
 
-replication_results_table <- function(reps, results_collection_period){
+replication_results_table <- function(reps, exp, results_collection_period){
   # generate and merge all results tables on the replication column
   results_table <- arrivals_by_replication(reps) %>% 
     merge(resource_waiting_times_by_replication(reps), by="replication", all=TRUE) %>% 
-    merge(resource_utilisation_by_replication(reps,
+    merge(resource_utilisation_by_replication(reps, exp,
                                               results_collection_period),
            by="replication", all=TRUE) %>% 
     merge(system_kpi_by_replication(reps), by="replication", all=TRUE) %>% 
@@ -237,7 +237,8 @@ histogram_of_replications <- function(rep_table, column_name, unit_label, n_bins
 ### 9.7 Results summary table
 
 # modified summary table function
-create_summary_table <- function(rep_table, exp, dp=2){
+# modified to remove passing the Experiment - not needed.
+create_summary_table <- function(rep_table, dp=2){
   # mean of all columns, but ignore rep number
   mean_values <- data.frame(colMeans(rep_table[c(2:length(rep_table))]))
   colnames(mean_values) <- c("mean")

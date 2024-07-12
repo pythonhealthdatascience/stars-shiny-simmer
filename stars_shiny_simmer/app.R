@@ -7,13 +7,17 @@
 #    http://shiny.rstudio.com/
 #
 
+# Modifications in last patch 2024/07/12 TM: 
+# removed Exp from create_summary_table - a bug but not the key one
+# added exp to replication_results_table - this is the bug!
+
 library(shiny)
 library(shinydashboard)
 library(waiter)
 library(ggplot2)
 library(tibble)
 
-# the treat-simmer
+# the treat-simmer model and analysis code
 source("./model.R")
 source("./output_analysis.R")
 
@@ -26,7 +30,7 @@ sidebar <- dashboardSidebar(
   ),
     sidebarMenu(id = "sidebarid",
     menuItem("Overview", icon = icon("star"), tabName = "overview"),
-    menuItem("Interative simulation", icon = icon("dashboard"), 
+    menuItem("Interative simulation", icon = icon("dashboard"),
              tabName = "intsim"),
     menuItem("About", icon = icon("lightbulb"), tabName = "about"),
     menuItem("Citation", icon = icon("book"), tabName = "citation"),
@@ -84,40 +88,40 @@ sidebar <- dashboardSidebar(
                 max = 10),
     
     h5("Trauma pathway"),
-    
+
     sliderInput(inputId = "prob_trauma",
                 label = "Probability trauma patient",
                 value = DEFAULT_PROB_TRAUMA,
                 min = 0,
                 max = 1.0),
-    
+
     sliderInput(inputId = "mean_trauma_treat_time",
                 label = "Mean treatment time",
                 value = DEFAULT_TRAUMA_TREATMENT_PARAMS$mu,
                 min = 0.0,
                 max = 100.0),
-    
-    # This isn't right because we need to convert 
+
+    # This isn't right because we need to convert
     # from lognormal to normal...
     sliderInput(inputId = "var_trauma_treat_time",
                 label = "Variance of treatment time",
                 value = DEFAULT_TRAUMA_TREATMENT_PARAMS$sigma,
                 min = 0.0,
                 max = 10.0),
-    
+
     h5("Non-Trauma pathway"),
-    
+
     sliderInput(inputId = "mean_exam_time",
                 label = "Mean examination time",
                 value = DEFAULT_EXAM_PARAMS$mean,
                 min = 0.0,
                 max = 45.0),
-    
+
     sliderInput(inputId = "var_exam_time",
                 label = "Variance of examination time",
                 value = DEFAULT_EXAM_PARAMS$var,
                 min = 0.0,
-                max = 15.0),
+                max = 15.0)
   )
 )
 
@@ -162,21 +166,20 @@ body <- dashboardBody(
           actionButton("run_model", "Run simulation"),
       ),
       
-      
       box(title = "Tabular results",
-          collapsible = TRUE, 
+          collapsible = TRUE,
           solidHeader = TRUE,
           width=4,
           tableOutput("sim_summary_table")
       ),
+      
       box(title = "Replications Histogram",
-          collapsible = TRUE, 
+          collapsible = TRUE,
           solidHeader = TRUE,
           width=8,
           plotOutput("rep_histogram")
       )
       
-    
     ),
     
     tabItem(tabName = "about",
@@ -247,7 +250,7 @@ server <- function(input, output){
                                           random_seed=42)
     
     # return a replications table
-    results <- replication_results_table(df_model_reps, 
+    results <- replication_results_table(df_model_reps, exp,
                                          DEFAULT_RESULTS_COLLECTION_PERIOD)
     
     return(results)
@@ -271,24 +274,30 @@ server <- function(input, output){
                ignoreNULL = F, {
 
   # update the replications table...
-  replications_table(run_simulation())
+  #replications_table(run_simulation())
   
    # renderTable continuously updates table
    output$sim_summary_table <- renderTable({
+    
      # create mean summary of KPI across replications
-     summary_table <- create_summary_table(replications_table(), exp)
+     #summary_table <- create_summary_table(replications_table())
+     summary_table <- create_summary_table(run_simulation())
      
      # print the results table
-     summary_table
+     summary_table 
      
    }, 
    rownames = TRUE) # table plot end.
    
    
-   ## output histogram of replications
+   # output histogram of replications
    output$rep_histogram <- renderPlot({
-     g <- histogram_of_replications(replications_table(), 
-                                    "09_throughput", 
+     # g <- histogram_of_replications(replications_table(),
+     #                                "09_throughput",
+     #                                "patients/day", n_bins=10)
+
+     g <- histogram_of_replications(run_simulation(),
+                                    "09_throughput",
                                     "patients/day", n_bins=10)
      g
    }, res = 96)
