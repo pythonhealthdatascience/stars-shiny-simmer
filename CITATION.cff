@@ -1,0 +1,76 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Sharing Tools and Artefacts for Reproducible Simulations
+  2.0: a template for a `shiny` interface to a `simmer` DES
+  model
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Thomas
+    family-names: Monks
+    affiliation: University of Exeter
+    orcid: 'https://orcid.org/0000-0003-2631-4481'
+  - given-names: Alison
+    family-names: Harper
+    affiliation: University of Exeter
+    orcid: 'https://orcid.org/0000-0001-5274-5037'
+  - given-names: Amy
+    family-names: Heather
+    affiliation: University of Exeter
+    orcid: 'https://orcid.org/0000-0002-6596-3479'
+  - given-names: Navonil
+    family-names: Mustafee
+    affiliation: University of Exeter
+    orcid: 'https://orcid.org/0000-0002-2204-8924'
+repository-code: >-
+  https://github.com/pythonhealthdatascience/stars-shiny-simmer
+abstract: >
+
+  The materials and methods in this model work towards
+  developing the STARS healthcare framework  (Sharing Tools
+  and Artifacts for Reproducible Simulations  in
+  healthcare). The code and written materials are a work  in
+  progress towards STARS version 2.0 (aiming to support 
+  both R and Python).  The materials are not currently 
+  production ready and are not recommended for use in
+  simulation practice at this stage.
+keywords:
+  - Free and Open Source Software
+  - Model Reuse
+  - Discrete-event simulation
+  - Open Science
+  - Simmer
+  - R
+  - Shiny
+license: MIT
+references:
+  - type: article
+    title: Towards sharing tools and artefacts for reusable simulations in healthcare
+    authors:
+      - given-names: Thomas
+        family-names: Monks
+      - given-names: Alison
+        family-names: Harper
+      - given-names: Navonil
+        family-names: Mustafee
+    doi: 10.1080/17477778.2024.2347882
+    journal: Journal of Simulation
+    publisher:
+      name: Taylor & Francis
+    month: 5
+    year: 2024
+  - type: book
+    title: Foundations and Methods of Stochastic Simulation
+    authors:
+      - given-names: Barry L.
+        family-names: Nelson
+    publisher:
+      name: Springer New York
+    year: 2013
+    doi: 10.1007/978-1-4614-6160-9
+    edition: 1st edition
