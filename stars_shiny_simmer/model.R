@@ -1,6 +1,5 @@
 library(simmer)
 library(simmer.bricks)
-suppressMessages(library(simmer.plot))
 library(tibble)
 library(ggplot2)
 suppressMessages(library(RCurl))

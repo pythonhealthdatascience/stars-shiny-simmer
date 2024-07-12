@@ -16,6 +16,7 @@ library(shinydashboard)
 library(waiter)
 library(ggplot2)
 library(tibble)
+library(markdown)
 
 # the treat-simmer model and analysis code
 source("./model.R")
