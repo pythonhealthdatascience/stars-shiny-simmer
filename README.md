@@ -11,8 +11,9 @@
   > The materials in this repo are experimental. 
 
 
->  🐍 **Looking for an interface to a Python DES model?**  🐍 
->   We have tested code available for [streamlit](https://github.com/pythonhealthdatascience/stars-streamlit-example) and [Shiny for Python](https://github.com/pythonhealthdatascience/stars-ciw-example)
+>  🐍 **Looking for an interface to a Python DES model?** 
+
+  >  We have tested code available for [streamlit](https://github.com/pythonhealthdatascience/stars-streamlit-example) and [Shiny for Python](https://github.com/pythonhealthdatascience/stars-ciw-example)
 
 ## Overview
 
