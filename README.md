@@ -11,6 +11,8 @@
   > The materials in this repo are experimental. 
 
 
+> Looking for an interface to a Python DES model? We have tested code available for [`simpy` and `streamlit`](https://github.com/pythonhealthdatascience/stars-streamlit-example) and [`ciw` and `Shiny for Python`](https://github.com/pythonhealthdatascience/stars-ciw-example)
+
 ## Overview
 
   The materials and methods in this documentation support work towards developing the **S.T.A.R.S healthcare framework** (**S**haring **T**ools and **A**rtifacts for **R**eproducible **S**imulations in healthcare).  Long term S.T.A.R.S aims to support researchers share open simulation models regardless of language choice, improve the quality of sharing, and reduce the workload required to meet high standards of open science for the modelling and simulation community.
