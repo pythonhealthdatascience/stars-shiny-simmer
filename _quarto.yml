@@ -1,0 +1,52 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Treatment Centre Simulation model"
+  image: "stars_simmer/www/nihr.png"
+  favicon: "stars_simmer/www/stars.png"
+  repo-url: https://github.com/pythonhealthdatascience
+  repo-actions: [edit, issue]
+  page-navigation: true
+  page-footer:
+    left:  |
+      [UK Research and Innovation](https://gtr.ukri.org/projects?ref=MR%2FZ503915%2F1)
+    center:     
+      - text: "License"
+        href: stars_simmer/www/txt/license.qmd
+      - text: "Citation"
+        href: stars_simmer/www/txt/citation.qmd
+    right:
+      - icon: github
+        href: https://github.com/pythonhealthdatascience
+  navbar:
+    logo: "stars_simmer/www/stars_logo_blue_text.png"
+    left:
+      - href: index.qmd
+        text: Treatment Centre Simulation Model
+      - about.qmd
+  sidebar:
+    style: "floating"
+    background: "#88a2c2"
+    alignment: center
+    collapse-level: 1
+    contents:
+      - text: "RUNNING THE MODEL"
+      - section: "Model code"
+        contents: 
+          - stars_simmer/model.qmd
+          - stars_simmer/model_int.qmd
+ 
+
+
+
+
+format:
+  html:
+    theme: cosmo
+
+    toc: true
+
+editor: visual
+

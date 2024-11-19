@@ -1,0 +1,41 @@
+---
+title: "     Model"
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - ggplot2
+---
+
+## Treatment Centre Simulation Model
+
+Treatment process:
+
+![](stars_simmer/www/process_flow_img.png){width="100%"}
+
+Daily arrival pattern:
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+library(ggplot2)
+
+arrival_data <- function() {
+  csv_data <- "stars_simmer/data/arrivals.csv"
+  df <- read.csv(csv_data)
+
+  df$period <- factor(df$period, levels = df$period)
+  return(df)
+}
+
+df_arrival <- arrival_data()
+plot <- ggplot(data = df_arrival, aes(x = period, y = arrival_rate)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  xlab("Hour of day") +
+  ylab("Mean arrivals (patients/hr)")
+
+print(plot)
+```
